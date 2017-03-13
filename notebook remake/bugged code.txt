@@ -1,0 +1,59 @@
+'when file has already been saved
+        If sfdSaveFile.FileName <> "" Then
+
+            With sfdSaveFile
+                .DefaultExt = "txt"
+                .FileName = strFileName
+                .Filter = "Text Files (.txt)|*.txt|Web Pages (.html)|*.html|Web Pages (.htm)| *.htm |All Files (*.*)|*.*"
+                .FilterIndex = 1
+                .OverwritePrompt = True
+
+            End With
+
+            Try
+                'save the filename
+                strFileName = sfdSaveFile.FileName
+
+                Dim filepath As String
+
+                'open or create the file
+                filepath = System.IO.Path.Combine(My.Computer.FileSystem.SpecialDirectories.MyDocuments, strFileName)
+
+                'replace the contents of the file
+                My.Computer.FileSystem.WriteAllText(filepath, rtbMainText.Text, False)
+
+            Catch ex As Exception
+
+            End Try
+        Else
+            'first time file save
+            If sfdSaveFile.FileName = "" Then
+                sfdSaveFile.FileName = ""
+                With sfdSaveFile
+                    .DefaultExt = "txt"
+                    .FileName = strFileName
+                    .Filter = "Text Files (.txt)|*.txt|Web Pages (.html)|*.html|Web Pages (.htm)| *.htm |All Files (*.*)|*.*"
+                    .FilterIndex = 1
+                    .OverwritePrompt = True
+                End With
+
+                If sfdSaveFile.ShowDialog = Windows.Forms.DialogResult.OK Then
+                    Try
+                        'save the filename
+                        strFileName = sfdSaveFile.FileName
+
+                        Dim filepath As String
+
+                        'open or create the file
+                        filepath = System.IO.Path.Combine(My.Computer.FileSystem.SpecialDirectories.MyDocuments, strFileName)
+
+                        'replace the contents of the file
+                        My.Computer.FileSystem.WriteAllText(filepath, rtbMainText.Text, False)
+
+                    Catch ex As Exception
+
+                    End Try
+
+                End If
+            End If
+        End If
